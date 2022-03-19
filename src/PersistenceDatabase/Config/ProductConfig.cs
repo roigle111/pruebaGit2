@@ -3,12 +3,28 @@ using Models;
 
 namespace PersistenceDatabase.Config
 {
-    public class ClientConfig
+    public class ProductConfig
     {
-        public ClientConfig(EntityTypeBuilder<Client> entityBuilder)
+        public ProductConfig(EntityTypeBuilder<Product> entityBuilder)
         {
-            entityBuilder.Property(x => x.ClientNumber).IsRequired().HasMaxLength(30);
-            entityBuilder.Property(x => x.Name).IsRequired().HasMaxLength(100);
+            entityBuilder.Property(x => x.Name).IsRequired().HasMaxLength(30);
+            entityBuilder.Property(x => x.Price).IsRequired();
+
+            entityBuilder.HasData(
+            new Product
+            {
+                ProductId = 1,
+                Name = "Disco SDD 480 GB",
+                Price = 4800,
+            },
+            new Product
+            {
+                ProductId = 2,
+                Name = "Memoria RAM 4GB DDR 4",
+                Price = 2500,
+            }
+            );
+
         }
     }
 }

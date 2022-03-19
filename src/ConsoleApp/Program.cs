@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Common;
+using Microsoft.EntityFrameworkCore;
 using PersistenceDatabase;
 using System;
 
@@ -9,7 +10,7 @@ namespace ConsoleApp
         static void Main(string[] args)
         {
             var optionBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
-            optionBuilder.UseSqlServer(@"data source=localhost\SQLEXPRESS;initial catalog=EFPrueba2;User ID=SisDialysisPub;Password=S1sD1alys1s@@733.;MultipleActiveResultSets=True;Application Name=EntityFramework");
+            optionBuilder.UseSqlServer(Parameter.ConectionString);
 
             var context = new ApplicationDbContext(optionBuilder.Options);
             TestConnection(context);

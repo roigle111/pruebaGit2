@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Common;
+using Microsoft.EntityFrameworkCore;
 using Models;
 using PersistenceDatabase.Config;
 
@@ -6,6 +7,11 @@ namespace PersistenceDatabase
 {
     public class ApplicationDbContext : DbContext
     {
+        public ApplicationDbContext()
+        {
+
+        }
+
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             :base(options)
         {
@@ -16,6 +22,14 @@ namespace PersistenceDatabase
         public DbSet<Order> Orders { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<OrderDetail> OrderDetail{ get; set; }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder dbContextOptionsBuilder)
+        {
+            if(!dbContextOptionsBuilder.IsConfigured)
+            {
+                dbContextOptionsBuilder.UseSqlServer(Parameter.ConectionString);
+            }
+        }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

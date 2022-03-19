@@ -3,11 +3,26 @@ using Models;
 
 namespace PersistenceDatabase.Config
 {
-    public class ProductConfig
+    public class ClientConfig
     {
-        public ProductConfig(EntityTypeBuilder<Product> entityBuilder)
+        public ClientConfig(EntityTypeBuilder<Client> entityBuilder)
         {
             entityBuilder.Property(x => x.Name).IsRequired().HasMaxLength(100);
+
+            entityBuilder.HasData(
+                new Client
+                {
+                    ClientId = 1,
+                    ClientNumber = "1000001",
+                    Name = "Fravega",
+                },
+                new Client
+                {
+                    ClientId = 2,
+                    ClientNumber = "1000002",
+                    Name = "Garvarino",
+                }
+                );
         }
     }
 }
