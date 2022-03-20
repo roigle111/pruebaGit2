@@ -1,9 +1,19 @@
-﻿namespace Models
+﻿using System;
+
+namespace Models
 {
-    public class Order
+    public class OrderDetail
     {
+        public Guid OrderDetailId { get; set; }
+        
         public string OrderId { get; set; }
-        public int ClientId { get; set; }
+        public Order Order { get; set; }
+        public int ProductId { get; set; }
+        public Product Product { get; set; }
+
+        public decimal UnitPrice { get; set; }
+        public int Quantity { get; set; }
+
         public decimal Iva { get; set; }
         public decimal SubTotal { get; set; }
         public decimal Total { get; set; }

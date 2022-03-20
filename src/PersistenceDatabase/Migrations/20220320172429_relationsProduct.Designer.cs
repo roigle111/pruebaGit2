@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PersistenceDatabase;
 
 namespace PersistenceDatabase.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220320172429_relationsProduct")]
+    partial class relationsProduct
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -65,9 +67,6 @@ namespace PersistenceDatabase.Migrations
                     b.Property<decimal>("Iva")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<DateTime>("RegisteredAt")
-                        .HasColumnType("datetime2");
-
                     b.Property<decimal>("SubTotal")
                         .HasColumnType("decimal(18,2)");
 
@@ -118,28 +117,6 @@ namespace PersistenceDatabase.Migrations
                     b.ToTable("OrderDetail");
                 });
 
-            modelBuilder.Entity("Models.OrderNumber", b =>
-                {
-                    b.Property<int>("Year")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("Value")
-                        .HasColumnType("int");
-
-                    b.HasKey("Year");
-
-                    b.ToTable("OrderNumbers");
-
-                    b.HasData(
-                        new
-                        {
-                            Year = 2022,
-                            Value = 0
-                        });
-                });
-
             modelBuilder.Entity("Models.Product", b =>
                 {
                     b.Property<int>("ProductId")
@@ -172,28 +149,6 @@ namespace PersistenceDatabase.Migrations
                             Name = "Memoria RAM 4GB DDR 4",
                             Price = 2500m
                         });
-                });
-
-            modelBuilder.Entity("Models.Sale", b =>
-                {
-                    b.Property<int>("Year")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Month")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("Iva")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal>("SubTotal")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal>("Total")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.HasKey("Year", "Month");
-
-                    b.ToTable("Sales");
                 });
 
             modelBuilder.Entity("Models.Order", b =>

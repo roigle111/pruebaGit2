@@ -22,6 +22,8 @@ namespace PersistenceDatabase
         public DbSet<Order> Orders { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<OrderDetail> OrderDetail{ get; set; }
+        public DbSet<Sale> Sales{ get; set; }
+        public DbSet<OrderNumber> OrderNumbers{ get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder dbContextOptionsBuilder)
         {
@@ -38,6 +40,8 @@ namespace PersistenceDatabase
             new OrderConfig(builder.Entity<Order>());
             new OrderDetailConfig(builder.Entity<OrderDetail>());
             new ProductConfig(builder.Entity<Product>());
+            new SaleConfig(builder.Entity<Sale>());
+            new OrderNumberConfig(builder.Entity<OrderNumber>());
         }
     }    
 
