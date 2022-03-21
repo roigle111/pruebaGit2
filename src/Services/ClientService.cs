@@ -13,9 +13,18 @@ namespace Services
             _context = context;
         }
 
+        public Client Get(int id)
+        {
+            //return _context.Clients.Single(x => x.ClientId == id);
+            //return _context.Clients.First(x => x.ClientId == id);
+            return _context.Clients.SingleOrDefault(x => x.ClientId == id);
+        }
+
         public IEnumerable<Client> GetAll()
         {
-            return _context.Clients.ToList();
+            return _context.Clients
+                .OrderByDescending(x => x.ClientId)
+                .ToList();
         }
 
     }

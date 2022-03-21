@@ -10,8 +10,8 @@ using PersistenceDatabase;
 namespace PersistenceDatabase.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220321142348_addWarehouse")]
-    partial class addWarehouse
+    [Migration("20220321205737_todo")]
+    partial class todo
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -210,6 +210,46 @@ namespace PersistenceDatabase.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Models.ProductExtraInformation", b =>
+                {
+                    b.Property<int>("ProductExtraInformationId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(500)")
+                        .HasMaxLength(500);
+
+                    b.Property<int>("Height")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Image")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("SKU")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(20)")
+                        .HasMaxLength(20);
+
+                    b.Property<int>("Size")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Weight")
+                        .HasColumnType("int");
+
+                    b.HasKey("ProductExtraInformationId");
+
+                    b.HasIndex("ProductId")
+                        .IsUnique();
+
+                    b.ToTable("ProductExtraInformation");
+                });
+
             modelBuilder.Entity("Models.Sale", b =>
                 {
                     b.Property<int>("Year")
@@ -311,6 +351,15 @@ namespace PersistenceDatabase.Migrations
                     b.HasOne("Models.Product", "Product")
                         .WithMany()
                         .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Models.ProductExtraInformation", b =>
+                {
+                    b.HasOne("Models.Product", "Product")
+                        .WithOne("ExtraInformation")
+                        .HasForeignKey("Models.ProductExtraInformation", "ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

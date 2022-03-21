@@ -18,17 +18,55 @@ namespace ConsoleApp
             //TestConnection(context);
 
             var clientService = new ClientService(context);
+            var productService = new ProductService(context);
 
 
             using (context)
             {
-                PrintClientTable(clientService);
+                PrintProductsTable(productService);
+                //PrintClientTable(clientService, 1);
+                //PrintClientsTable(clientService);
             }
 
+            Console.WriteLine("Fin.");
             Console.Read();
         }
 
-        static void PrintClientTable(ClientService clientService)
+        static void PrintProductsTable(ProductService productService)
+        {
+            var products = productService.GetAll();
+
+            var table = new Table("ProductId", "Name", "Price");
+
+            foreach (var product in products)
+            {
+                table.AddRow(product.ProductId, product.Name, product.Price);
+            }
+
+            Console.Write(table.ToString());
+
+        }
+
+
+        static void PrintClientTable(ClientService clientService, int id)
+        {
+            var client = clientService.Get(id);
+
+            if(client != null)
+            {
+                // BetterConsoleTables (1.1.2)
+                var table = new Table("ClientId", "ClientNumber", "Name", "Country");
+                table.AddRow(client.ClientId, client.ClientNumber, client.Name, client.Country?.Name ?? "-");
+
+                //foreach (var client in clients)
+                //{
+                //    table.AddRow(client.ClientId, client.ClientNumber, client.Name, client.Country?.Name ?? "-");
+                //}
+
+                Console.Write(table.ToString());
+            }
+        }
+        static void PrintClientsTable(ClientService clientService)
         {
             var clients = clientService.GetAll();
 

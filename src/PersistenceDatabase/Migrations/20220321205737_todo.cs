@@ -8,17 +8,16 @@ namespace PersistenceDatabase.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Clients",
+                name: "Countries",
                 columns: table => new
                 {
-                    ClientId = table.Column<int>(nullable: false)
+                    CountryId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ClientNumber = table.Column<string>(nullable: true),
                     Name = table.Column<string>(maxLength: 100, nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Clients", x => x.ClientId);
+                    table.PrimaryKey("PK_Countries", x => x.CountryId);
                 });
 
             migrationBuilder.CreateTable(
@@ -61,6 +60,92 @@ namespace PersistenceDatabase.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Sales", x => new { x.Year, x.Month });
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Warehouses",
+                columns: table => new
+                {
+                    WarehouseId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(maxLength: 30, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Warehouses", x => x.WarehouseId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Clients",
+                columns: table => new
+                {
+                    ClientId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Country_Id = table.Column<int>(nullable: true),
+                    ClientNumber = table.Column<string>(nullable: true),
+                    Name = table.Column<string>(maxLength: 100, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Clients", x => x.ClientId);
+                    table.ForeignKey(
+                        name: "FK_Clients_Countries_Country_Id",
+                        column: x => x.Country_Id,
+                        principalTable: "Countries",
+                        principalColumn: "CountryId",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ProductExtraInformation",
+                columns: table => new
+                {
+                    ProductExtraInformationId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    SKU = table.Column<string>(maxLength: 20, nullable: false),
+                    Description = table.Column<string>(maxLength: 500, nullable: false),
+                    Image = table.Column<string>(nullable: true),
+                    Weight = table.Column<int>(nullable: false),
+                    Height = table.Column<int>(nullable: false),
+                    Size = table.Column<int>(nullable: false),
+                    ProductId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProductExtraInformation", x => x.ProductExtraInformationId);
+                    table.ForeignKey(
+                        name: "FK_ProductExtraInformation_Products_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "Products",
+                        principalColumn: "ProductId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "WarewhouseProducts",
+                columns: table => new
+                {
+                    WarewhouseProductId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ProductId = table.Column<int>(nullable: false),
+                    WarehousrId = table.Column<int>(nullable: false),
+                    WarehouseId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_WarewhouseProducts", x => x.WarewhouseProductId);
+                    table.ForeignKey(
+                        name: "FK_WarewhouseProducts_Products_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "Products",
+                        principalColumn: "ProductId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_WarewhouseProducts_Warehouses_WarehouseId",
+                        column: x => x.WarehouseId,
+                        principalTable: "Warehouses",
+                        principalColumn: "WarehouseId",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -117,11 +202,20 @@ namespace PersistenceDatabase.Migrations
 
             migrationBuilder.InsertData(
                 table: "Clients",
-                columns: new[] { "ClientId", "ClientNumber", "Name" },
+                columns: new[] { "ClientId", "ClientNumber", "Country_Id", "Name" },
                 values: new object[,]
                 {
-                    { 1, "1000001", "Fravega" },
-                    { 2, "1000002", "Garvarino" }
+                    { 1, "1000001", null, "Fravega" },
+                    { 2, "1000002", null, "Garvarino" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Countries",
+                columns: new[] { "CountryId", "Name" },
+                values: new object[,]
+                {
+                    { 1, "Argentina" },
+                    { 2, "Perú" }
                 });
 
             migrationBuilder.InsertData(
@@ -138,6 +232,20 @@ namespace PersistenceDatabase.Migrations
                     { 2, "Memoria RAM 4GB DDR 4", 2500m }
                 });
 
+            migrationBuilder.InsertData(
+                table: "Warehouses",
+                columns: new[] { "WarehouseId", "Name" },
+                values: new object[,]
+                {
+                    { 1, "Sector AA" },
+                    { 2, "Sector BB" }
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Clients_Country_Id",
+                table: "Clients",
+                column: "Country_Id");
+
             migrationBuilder.CreateIndex(
                 name: "IX_OrderDetail_OrderId",
                 table: "OrderDetail",
@@ -152,6 +260,22 @@ namespace PersistenceDatabase.Migrations
                 name: "IX_Orders_ClientId",
                 table: "Orders",
                 column: "ClientId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProductExtraInformation_ProductId",
+                table: "ProductExtraInformation",
+                column: "ProductId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_WarewhouseProducts_ProductId",
+                table: "WarewhouseProducts",
+                column: "ProductId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_WarewhouseProducts_WarehouseId",
+                table: "WarewhouseProducts",
+                column: "WarehouseId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -163,7 +287,13 @@ namespace PersistenceDatabase.Migrations
                 name: "OrderNumbers");
 
             migrationBuilder.DropTable(
+                name: "ProductExtraInformation");
+
+            migrationBuilder.DropTable(
                 name: "Sales");
+
+            migrationBuilder.DropTable(
+                name: "WarewhouseProducts");
 
             migrationBuilder.DropTable(
                 name: "Orders");
@@ -172,7 +302,13 @@ namespace PersistenceDatabase.Migrations
                 name: "Products");
 
             migrationBuilder.DropTable(
+                name: "Warehouses");
+
+            migrationBuilder.DropTable(
                 name: "Clients");
+
+            migrationBuilder.DropTable(
+                name: "Countries");
         }
     }
 }
