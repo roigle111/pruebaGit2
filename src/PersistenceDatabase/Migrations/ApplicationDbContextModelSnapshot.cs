@@ -29,12 +29,17 @@ namespace PersistenceDatabase.Migrations
                     b.Property<string>("ClientNumber")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("Country_Id")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(100)")
                         .HasMaxLength(100);
 
                     b.HasKey("ClientId");
+
+                    b.HasIndex("Country_Id");
 
                     b.ToTable("Clients");
 
@@ -50,6 +55,35 @@ namespace PersistenceDatabase.Migrations
                             ClientId = 2,
                             ClientNumber = "1000002",
                             Name = "Garvarino"
+                        });
+                });
+
+            modelBuilder.Entity("Models.Country", b =>
+                {
+                    b.Property<int>("CountryId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
+
+                    b.HasKey("CountryId");
+
+                    b.ToTable("Countries");
+
+                    b.HasData(
+                        new
+                        {
+                            CountryId = 1,
+                            Name = "Argentina"
+                        },
+                        new
+                        {
+                            CountryId = 2,
+                            Name = "Perú"
                         });
                 });
 
@@ -174,6 +208,46 @@ namespace PersistenceDatabase.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Models.ProductExtraInformation", b =>
+                {
+                    b.Property<int>("ProductExtraInformationId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(500)")
+                        .HasMaxLength(500);
+
+                    b.Property<int>("Height")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Image")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("SKU")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(20)")
+                        .HasMaxLength(20);
+
+                    b.Property<int>("Size")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Weight")
+                        .HasColumnType("int");
+
+                    b.HasKey("ProductExtraInformationId");
+
+                    b.HasIndex("ProductId")
+                        .IsUnique();
+
+                    b.ToTable("ProductExtraInformation");
+                });
+
             modelBuilder.Entity("Models.Sale", b =>
                 {
                     b.Property<int>("Year")
@@ -196,6 +270,67 @@ namespace PersistenceDatabase.Migrations
                     b.ToTable("Sales");
                 });
 
+            modelBuilder.Entity("Models.Warehouse", b =>
+                {
+                    b.Property<int>("WarehouseId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(30)")
+                        .HasMaxLength(30);
+
+                    b.HasKey("WarehouseId");
+
+                    b.ToTable("Warehouses");
+
+                    b.HasData(
+                        new
+                        {
+                            WarehouseId = 1,
+                            Name = "Sector AA"
+                        },
+                        new
+                        {
+                            WarehouseId = 2,
+                            Name = "Sector BB"
+                        });
+                });
+
+            modelBuilder.Entity("Models.WarewhouseProduct", b =>
+                {
+                    b.Property<int>("WarewhouseProductId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("WarehouseId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("WarehousrId")
+                        .HasColumnType("int");
+
+                    b.HasKey("WarewhouseProductId");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("WarehouseId");
+
+                    b.ToTable("WarewhouseProducts");
+                });
+
+            modelBuilder.Entity("Models.Client", b =>
+                {
+                    b.HasOne("Models.Country", "Country")
+                        .WithMany("Clients")
+                        .HasForeignKey("Country_Id");
+                });
+
             modelBuilder.Entity("Models.Order", b =>
                 {
                     b.HasOne("Models.Client", "Client")
@@ -216,6 +351,28 @@ namespace PersistenceDatabase.Migrations
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Models.ProductExtraInformation", b =>
+                {
+                    b.HasOne("Models.Product", "Product")
+                        .WithOne("ExtraInformation")
+                        .HasForeignKey("Models.ProductExtraInformation", "ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Models.WarewhouseProduct", b =>
+                {
+                    b.HasOne("Models.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Models.Warehouse", "Warehouse")
+                        .WithMany()
+                        .HasForeignKey("WarehouseId");
                 });
 #pragma warning restore 612, 618
         }

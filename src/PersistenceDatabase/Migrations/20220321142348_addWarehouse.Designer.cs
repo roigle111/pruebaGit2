@@ -10,8 +10,8 @@ using PersistenceDatabase;
 namespace PersistenceDatabase.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220320172429_relationsProduct")]
-    partial class relationsProduct
+    [Migration("20220321142348_addWarehouse")]
+    partial class addWarehouse
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -31,12 +31,17 @@ namespace PersistenceDatabase.Migrations
                     b.Property<string>("ClientNumber")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("Country_Id")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(100)")
                         .HasMaxLength(100);
 
                     b.HasKey("ClientId");
+
+                    b.HasIndex("Country_Id");
 
                     b.ToTable("Clients");
 
@@ -55,6 +60,35 @@ namespace PersistenceDatabase.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Models.Country", b =>
+                {
+                    b.Property<int>("CountryId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
+
+                    b.HasKey("CountryId");
+
+                    b.ToTable("Countries");
+
+                    b.HasData(
+                        new
+                        {
+                            CountryId = 1,
+                            Name = "Argentina"
+                        },
+                        new
+                        {
+                            CountryId = 2,
+                            Name = "Perú"
+                        });
+                });
+
             modelBuilder.Entity("Models.Order", b =>
                 {
                     b.Property<string>("OrderId")
@@ -66,6 +100,9 @@ namespace PersistenceDatabase.Migrations
 
                     b.Property<decimal>("Iva")
                         .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime>("RegisteredAt")
+                        .HasColumnType("datetime2");
 
                     b.Property<decimal>("SubTotal")
                         .HasColumnType("decimal(18,2)");
@@ -117,6 +154,28 @@ namespace PersistenceDatabase.Migrations
                     b.ToTable("OrderDetail");
                 });
 
+            modelBuilder.Entity("Models.OrderNumber", b =>
+                {
+                    b.Property<int>("Year")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("Value")
+                        .HasColumnType("int");
+
+                    b.HasKey("Year");
+
+                    b.ToTable("OrderNumbers");
+
+                    b.HasData(
+                        new
+                        {
+                            Year = 2022,
+                            Value = 0
+                        });
+                });
+
             modelBuilder.Entity("Models.Product", b =>
                 {
                     b.Property<int>("ProductId")
@@ -151,6 +210,89 @@ namespace PersistenceDatabase.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Models.Sale", b =>
+                {
+                    b.Property<int>("Year")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Month")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Iva")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("SubTotal")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Total")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Year", "Month");
+
+                    b.ToTable("Sales");
+                });
+
+            modelBuilder.Entity("Models.Warehouse", b =>
+                {
+                    b.Property<int>("WarehouseId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(30)")
+                        .HasMaxLength(30);
+
+                    b.HasKey("WarehouseId");
+
+                    b.ToTable("Warehouses");
+
+                    b.HasData(
+                        new
+                        {
+                            WarehouseId = 1,
+                            Name = "Sector AA"
+                        },
+                        new
+                        {
+                            WarehouseId = 2,
+                            Name = "Sector BB"
+                        });
+                });
+
+            modelBuilder.Entity("Models.WarewhouseProduct", b =>
+                {
+                    b.Property<int>("WarewhouseProductId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("WarehouseId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("WarehousrId")
+                        .HasColumnType("int");
+
+                    b.HasKey("WarewhouseProductId");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("WarehouseId");
+
+                    b.ToTable("WarewhouseProducts");
+                });
+
+            modelBuilder.Entity("Models.Client", b =>
+                {
+                    b.HasOne("Models.Country", "Country")
+                        .WithMany("Clients")
+                        .HasForeignKey("Country_Id");
+                });
+
             modelBuilder.Entity("Models.Order", b =>
                 {
                     b.HasOne("Models.Client", "Client")
@@ -171,6 +313,19 @@ namespace PersistenceDatabase.Migrations
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Models.WarewhouseProduct", b =>
+                {
+                    b.HasOne("Models.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Models.Warehouse", "Warehouse")
+                        .WithMany()
+                        .HasForeignKey("WarehouseId");
                 });
 #pragma warning restore 612, 618
         }

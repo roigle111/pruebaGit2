@@ -5,8 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Migrations\20220319175849_addCountry.cs" />
-    <Compile Remove="Migrations\20220319175849_addCountry.Designer.cs" />
+    <Compile Remove="Migrations\20220321124026_addCountry.cs" />
+    <Compile Remove="Migrations\20220321124026_addCountry.Designer.cs" />
+    <Compile Remove="Migrations\20220321141618_addWarehouse.cs" />
+    <Compile Remove="Migrations\20220321141618_addWarehouse.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

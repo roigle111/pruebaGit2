@@ -8,6 +8,9 @@ namespace PersistenceDatabase.Config
         public ClientConfig(EntityTypeBuilder<Client> entityBuilder)
         {
             entityBuilder.Property(x => x.Name).IsRequired().HasMaxLength(100);
+            entityBuilder.HasOne(x => x.Country)
+                         .WithMany(x => x.Clients)
+                         .HasForeignKey(x => x.Country_Id);
 
             entityBuilder.HasData(
                 new Client
@@ -21,8 +24,7 @@ namespace PersistenceDatabase.Config
                     ClientId = 2,
                     ClientNumber = "1000002",
                     Name = "Garvarino",
-                }
-                );
+                });
         }
     }
 }
