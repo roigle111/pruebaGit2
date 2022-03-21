@@ -38,8 +38,9 @@ namespace ConsoleApp
             foreach (var client in clients)
             {
                 table.AddRow(client.ClientId, client.ClientNumber, client.Name, client.Country?.Name ?? "-");
-                Console.Write(table.ToString());
             }
+
+            Console.Write(table.ToString());
 
         }
 
