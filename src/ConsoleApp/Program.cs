@@ -37,20 +37,20 @@ namespace ConsoleApp
 
         static void PrintWaewhouseAndProducts(WarehouseService warehouseService)
         {
-            var warehouses = warehouseService.GetAll();
+            var warehouses = warehouseService.GetAllWithProducts();
 
-            var table = new Table("Warehouse", "Product");
+            //var table = new Table("Warehouse", "Product");
 
-            foreach (var warehouse in warehouses)
-            {
-                table.AddRow(warehouse.Name, "-");
-                foreach (var warehouseProduct in warehouse.Products)
-                {
-                    table.AddRow("Producto", warehouseProduct.Product.Name);
-                }
-            }
+            //foreach (var warehouse in warehouses)
+            //{
+            //    table.AddRow(warehouse.Name, "-");
+            //    foreach (var warehouseProduct in warehouse.Products)
+            //    {
+            //        table.AddRow("Producto", warehouseProduct.Product.Name);
+            //    }
+            //}
 
-            Console.Write(table.ToString());
+            //Console.Write(table.ToString());
 
         }
 
