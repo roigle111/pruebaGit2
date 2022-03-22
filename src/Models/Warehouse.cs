@@ -7,7 +7,7 @@ namespace Models
         public int WarehouseId { get; set; }
         public string Name { get; set; }
 
-        public List<WarewhouseProduct> Products;
+        public List<WarehouseProduct> Products { get; set; }
     }
 }
 

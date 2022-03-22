@@ -48,12 +48,14 @@ namespace PersistenceDatabase.Migrations
                         {
                             ClientId = 1,
                             ClientNumber = "1000001",
+                            Country_Id = 1,
                             Name = "Fravega"
                         },
                         new
                         {
                             ClientId = 2,
                             ClientNumber = "1000002",
+                            Country_Id = 2,
                             Name = "Garvarino"
                         });
                 });
@@ -205,6 +207,90 @@ namespace PersistenceDatabase.Migrations
                             ProductId = 2,
                             Name = "Memoria RAM 4GB DDR 4",
                             Price = 2500m
+                        },
+                        new
+                        {
+                            ProductId = 3,
+                            Name = "Disco SDD 240 GB",
+                            Price = 2100m
+                        },
+                        new
+                        {
+                            ProductId = 4,
+                            Name = "Memoria RAM 8GB DDR 4",
+                            Price = 4700m
+                        },
+                        new
+                        {
+                            ProductId = 5,
+                            Name = "Disco HDD 1 TB",
+                            Price = 6800m
+                        },
+                        new
+                        {
+                            ProductId = 6,
+                            Name = "Memoria RAM 4GB DDR 3",
+                            Price = 2200m
+                        },
+                        new
+                        {
+                            ProductId = 7,
+                            Name = "Pendrive Kingston 4GB",
+                            Price = 1200m
+                        },
+                        new
+                        {
+                            ProductId = 8,
+                            Name = "Pendrive Kingston 8GB",
+                            Price = 3500m
+                        },
+                        new
+                        {
+                            ProductId = 9,
+                            Name = "Pendrive Kingston 16GB",
+                            Price = 5100m
+                        },
+                        new
+                        {
+                            ProductId = 10,
+                            Name = "Monitor 22´´ samsung",
+                            Price = 25000m
+                        },
+                        new
+                        {
+                            ProductId = 11,
+                            Name = "Mouse Genius USB",
+                            Price = 1400m
+                        },
+                        new
+                        {
+                            ProductId = 12,
+                            Name = "Mouse Logitech USB",
+                            Price = 2200m
+                        },
+                        new
+                        {
+                            ProductId = 13,
+                            Name = "Cable USB",
+                            Price = 900m
+                        },
+                        new
+                        {
+                            ProductId = 14,
+                            Name = "Cable HDMI 2 Mts.",
+                            Price = 1700m
+                        },
+                        new
+                        {
+                            ProductId = 15,
+                            Name = "Cable RED UTP5 5 Mts.",
+                            Price = 3600m
+                        },
+                        new
+                        {
+                            ProductId = 16,
+                            Name = "Parlantes Genius PC",
+                            Price = 4000m
                         });
                 });
 
@@ -299,9 +385,9 @@ namespace PersistenceDatabase.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Models.WarewhouseProduct", b =>
+            modelBuilder.Entity("Models.WarehouseProduct", b =>
                 {
-                    b.Property<int>("WarewhouseProductId")
+                    b.Property<int>("WarehouseProductId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -309,19 +395,48 @@ namespace PersistenceDatabase.Migrations
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("WarehouseId")
+                    b.Property<int>("WarehouseId")
                         .HasColumnType("int");
 
-                    b.Property<int>("WarehousrId")
-                        .HasColumnType("int");
-
-                    b.HasKey("WarewhouseProductId");
+                    b.HasKey("WarehouseProductId");
 
                     b.HasIndex("ProductId");
 
                     b.HasIndex("WarehouseId");
 
                     b.ToTable("WarewhouseProducts");
+
+                    b.HasData(
+                        new
+                        {
+                            WarehouseProductId = 1,
+                            ProductId = 1,
+                            WarehouseId = 1
+                        },
+                        new
+                        {
+                            WarehouseProductId = 2,
+                            ProductId = 2,
+                            WarehouseId = 1
+                        },
+                        new
+                        {
+                            WarehouseProductId = 3,
+                            ProductId = 3,
+                            WarehouseId = 1
+                        },
+                        new
+                        {
+                            WarehouseProductId = 4,
+                            ProductId = 4,
+                            WarehouseId = 2
+                        },
+                        new
+                        {
+                            WarehouseProductId = 5,
+                            ProductId = 5,
+                            WarehouseId = 2
+                        });
                 });
 
             modelBuilder.Entity("Models.Client", b =>
@@ -362,7 +477,7 @@ namespace PersistenceDatabase.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Models.WarewhouseProduct", b =>
+            modelBuilder.Entity("Models.WarehouseProduct", b =>
                 {
                     b.HasOne("Models.Product", "Product")
                         .WithMany()
@@ -372,7 +487,9 @@ namespace PersistenceDatabase.Migrations
 
                     b.HasOne("Models.Warehouse", "Warehouse")
                         .WithMany()
-                        .HasForeignKey("WarehouseId");
+                        .HasForeignKey("WarehouseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

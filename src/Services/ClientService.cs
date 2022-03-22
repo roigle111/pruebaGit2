@@ -1,4 +1,5 @@
-﻿using Models;
+﻿using Microsoft.EntityFrameworkCore;
+using Models;
 using PersistenceDatabase;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,6 +24,7 @@ namespace Services
         public IEnumerable<Client> GetAll()
         {
             return _context.Clients
+                .Include(x => x.Country)
                 .OrderByDescending(x => x.ClientId)
                 .ToList();
         }

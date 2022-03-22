@@ -26,7 +26,7 @@ namespace PersistenceDatabase
         public DbSet<OrderNumber> OrderNumbers{ get; set; }
         public DbSet<Country> Countries { get; set; }
         public DbSet<Warehouse> Warehouses { get; set; }
-        public DbSet<WarewhouseProduct> WarewhouseProducts { get; set; }
+        public DbSet<WarehouseProduct> WarewhouseProducts { get; set; }
         public DbSet<ProductExtraInformation> ProductExtraInformation { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder dbContextOptionsBuilder)
@@ -48,6 +48,7 @@ namespace PersistenceDatabase
             new OrderNumberConfig(builder.Entity<OrderNumber>());
             new CountryConfig(builder.Entity<Country>());
             new WarehouseConfig(builder.Entity<Warehouse>());
+            new WarehouseProductConfig(builder.Entity<WarehouseProduct>());
             new ProductExtraInformationConfig(builder.Entity<ProductExtraInformation>());
         }
     }    

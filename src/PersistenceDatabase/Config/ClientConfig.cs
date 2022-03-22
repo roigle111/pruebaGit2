@@ -18,12 +18,14 @@ namespace PersistenceDatabase.Config
                     ClientId = 1,
                     ClientNumber = "1000001",
                     Name = "Fravega",
+                    Country_Id = 1,
                 },
                 new Client
                 {
                     ClientId = 2,
                     ClientNumber = "1000002",
                     Name = "Garvarino",
+                    Country_Id = 2,
                 });
         }
     }

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace PersistenceDatabase.Migrations
 {
-    public partial class todo : Migration
+    public partial class TodoJob : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -125,15 +125,14 @@ namespace PersistenceDatabase.Migrations
                 name: "WarewhouseProducts",
                 columns: table => new
                 {
-                    WarewhouseProductId = table.Column<int>(nullable: false)
+                    WarehouseProductId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ProductId = table.Column<int>(nullable: false),
-                    WarehousrId = table.Column<int>(nullable: false),
-                    WarehouseId = table.Column<int>(nullable: true)
+                    WarehouseId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_WarewhouseProducts", x => x.WarewhouseProductId);
+                    table.PrimaryKey("PK_WarewhouseProducts", x => x.WarehouseProductId);
                     table.ForeignKey(
                         name: "FK_WarewhouseProducts_Products_ProductId",
                         column: x => x.ProductId,
@@ -145,7 +144,7 @@ namespace PersistenceDatabase.Migrations
                         column: x => x.WarehouseId,
                         principalTable: "Warehouses",
                         principalColumn: "WarehouseId",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -201,15 +200,6 @@ namespace PersistenceDatabase.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "Clients",
-                columns: new[] { "ClientId", "ClientNumber", "Country_Id", "Name" },
-                values: new object[,]
-                {
-                    { 1, "1000001", null, "Fravega" },
-                    { 2, "1000002", null, "Garvarino" }
-                });
-
-            migrationBuilder.InsertData(
                 table: "Countries",
                 columns: new[] { "CountryId", "Name" },
                 values: new object[,]
@@ -228,8 +218,22 @@ namespace PersistenceDatabase.Migrations
                 columns: new[] { "ProductId", "Name", "Price" },
                 values: new object[,]
                 {
-                    { 1, "Disco SDD 480 GB", 4800m },
-                    { 2, "Memoria RAM 4GB DDR 4", 2500m }
+                    { 16, "Parlantes Genius PC", 4000m },
+                    { 15, "Cable RED UTP5 5 Mts.", 3600m },
+                    { 14, "Cable HDMI 2 Mts.", 1700m },
+                    { 13, "Cable USB", 900m },
+                    { 12, "Mouse Logitech USB", 2200m },
+                    { 11, "Mouse Genius USB", 1400m },
+                    { 10, "Monitor 22´´ samsung", 25000m },
+                    { 9, "Pendrive Kingston 16GB", 5100m },
+                    { 8, "Pendrive Kingston 8GB", 3500m },
+                    { 7, "Pendrive Kingston 4GB", 1200m },
+                    { 6, "Memoria RAM 4GB DDR 3", 2200m },
+                    { 5, "Disco HDD 1 TB", 6800m },
+                    { 4, "Memoria RAM 8GB DDR 4", 4700m },
+                    { 3, "Disco SDD 240 GB", 2100m },
+                    { 2, "Memoria RAM 4GB DDR 4", 2500m },
+                    { 1, "Disco SDD 480 GB", 4800m }
                 });
 
             migrationBuilder.InsertData(
@@ -239,6 +243,27 @@ namespace PersistenceDatabase.Migrations
                 {
                     { 1, "Sector AA" },
                     { 2, "Sector BB" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Clients",
+                columns: new[] { "ClientId", "ClientNumber", "Country_Id", "Name" },
+                values: new object[,]
+                {
+                    { 1, "1000001", 1, "Fravega" },
+                    { 2, "1000002", 2, "Garvarino" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "WarewhouseProducts",
+                columns: new[] { "WarehouseProductId", "ProductId", "WarehouseId" },
+                values: new object[,]
+                {
+                    { 1, 1, 1 },
+                    { 2, 2, 1 },
+                    { 3, 3, 1 },
+                    { 4, 4, 2 },
+                    { 5, 5, 2 }
                 });
 
             migrationBuilder.CreateIndex(

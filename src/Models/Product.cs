@@ -8,7 +8,7 @@ namespace Models
         public string Name { get; set; }
         public decimal Price { get; set; }
 
-        public List<WarewhouseProduct> Warehouses;
+        public List<WarehouseProduct> Warehouses;
 
         public ProductExtraInformation ExtraInformation { get; set; }
     }

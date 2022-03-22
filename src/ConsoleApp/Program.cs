@@ -19,18 +19,41 @@ namespace ConsoleApp
 
             var clientService = new ClientService(context);
             var productService = new ProductService(context);
+            var warehouseService = new WarehouseService(context);
 
 
             using (context)
             {
-                PrintProductsTable(productService);
+                PrintWaewhouseAndProducts(warehouseService);
+                //PrintProductsTable(productService);
                 //PrintClientTable(clientService, 1);
                 //PrintClientsTable(clientService);
+                //TestConnection(context);
             }
 
             Console.WriteLine("Fin.");
             Console.Read();
         }
+
+        static void PrintWaewhouseAndProducts(WarehouseService warehouseService)
+        {
+            var warehouses = warehouseService.GetAll();
+
+            var table = new Table("Warehouse", "Product");
+
+            foreach (var warehouse in warehouses)
+            {
+                table.AddRow(warehouse.Name, "-");
+                foreach (var warehouseProduct in warehouse.Products)
+                {
+                    table.AddRow("Producto", warehouseProduct.Product.Name);
+                }
+            }
+
+            Console.Write(table.ToString());
+
+        }
+
 
         static void PrintProductsTable(ProductService productService)
         {

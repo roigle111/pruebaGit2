@@ -1,13 +1,13 @@
 ﻿namespace Models
 {
-    public class WarewhouseProduct
+    public class WarehouseProduct
     {
-        public int WarewhouseProductId { get; set; }
+        public int WarehouseProductId { get; set; }
 
         public int ProductId { get; set; }
         public Product Product { get; set; }
 
-        public int WarehousrId { get; set; }
+        public int WarehouseId { get; set; }
         public Warehouse Warehouse { get; set; }
     }
 }
