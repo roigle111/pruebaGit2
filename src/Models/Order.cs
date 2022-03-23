@@ -9,7 +9,7 @@ namespace Models
         
         public int ClientId { get; set; }
         public Client Client { get; set; }
-        List<OrderDetail> Items { get; set; }
+        public List<OrderDetail> Items { get; set; }
 
         public decimal Iva { get; set; }
         public decimal SubTotal { get; set; }

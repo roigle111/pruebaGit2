@@ -1,9 +1,11 @@
 ﻿using BetterConsoleTables;
 using Common;
 using Microsoft.EntityFrameworkCore;
+using Models;
 using PersistenceDatabase;
 using Services;
 using System;
+using System.Collections.Generic;
 
 namespace ConsoleApp
 {
@@ -20,11 +22,39 @@ namespace ConsoleApp
             var clientService = new ClientService(context);
             var productService = new ProductService(context);
             var warehouseService = new WarehouseService(context);
+            var OrderService = new OrderService(context);
 
+            var newOrder = new Order
+            {
+                ClientId = 1,
+                Items = new List<OrderDetail>
+                {
+                    new OrderDetail
+                    {
+                        ProductId = 1,
+                        UnitPrice = 700,
+                        Quantity = 2,
+
+                    },
+                    new OrderDetail
+                    {
+                        ProductId = 2,
+                        UnitPrice = 1400,
+                        Quantity = 1,
+
+                    }
+                }
+            };
 
             using (context)
             {
-                PrintWaewhouseAndProducts(warehouseService);
+                OrderService.Create(newOrder);
+                //warehouseService.Delete(new List<int> {3, 4, 5, 6});
+                //UpdateClients(clientService);
+                //UpdateClient(clientService);
+                //CreateClients(clientService);
+                //CreateClient(clientService);
+                //PrintWaewhouseAndProductsOrder(warehouseService);
                 //PrintProductsTable(productService);
                 //PrintClientTable(clientService, 1);
                 //PrintClientsTable(clientService);
@@ -35,22 +65,98 @@ namespace ConsoleApp
             Console.Read();
         }
 
+        static void UpdateClients(ClientService clientService)
+        {
+            var originalClients = new List<Client>();
+
+            originalClients.Add(new Client
+            {
+                ClientId = 1,
+                Name = "Client111-UPDATE"
+            });
+
+            originalClients.Add(new Client
+            {
+                ClientId = 2,
+                Name = "Client222-UPDATE"
+            });
+
+            clientService.Update(originalClients);
+        }
+        static void UpdateClient(ClientService clientService)
+        {
+            var originCLient = new Client
+            {
+                ClientId = 1,
+                Name = "Client1-MOD"
+            };
+
+            clientService.Update(originCLient);
+        }
+
+        static void CreateClient(ClientService clientService)
+        {
+            var newClient = new Client
+            {
+                ClientNumber = "001",
+                Country_Id = 1,
+                Name = "Grido"
+            };
+
+            clientService.Create(newClient);
+        }
+
+        static void CreateClients(ClientService clientService)
+        {
+            var newClients = new List<Client>();
+
+            newClients.Add(new Client
+            {
+                ClientNumber = "002",
+                Country_Id = 2,
+                Name = "Kokyno"
+            });
+            
+            newClients.Add(new Client
+            {
+                ClientNumber = "003",
+                Country_Id = 2,
+                Name = "Tello"
+            });
+
+            clientService.Create(newClients);
+        }
+
+        static void PrintWaewhouseAndProductsOrder(WarehouseService warehouseService)
+        {
+            var products = warehouseService.GetAllWithProducts();
+
+            var table = new Table("Almacen", "Producto", "Precio");
+
+            foreach (var product in products)
+            {
+                table.AddRow(product.WerhouseName, product.ProductName, product.ProducrPrice );
+            }
+
+            Console.Write(table.ToString());
+        }
+
         static void PrintWaewhouseAndProducts(WarehouseService warehouseService)
         {
-            var warehouses = warehouseService.GetAllWithProducts();
+            var warehouses = warehouseService.GetAll();
 
-            //var table = new Table("Warehouse", "Product");
+            var table = new Table("Warehouse", "Product");
 
-            //foreach (var warehouse in warehouses)
-            //{
-            //    table.AddRow(warehouse.Name, "-");
-            //    foreach (var warehouseProduct in warehouse.Products)
-            //    {
-            //        table.AddRow("Producto", warehouseProduct.Product.Name);
-            //    }
-            //}
+            foreach (var warehouse in warehouses)
+            {
+                table.AddRow(warehouse.Name, "-");
+                foreach (var warehouseProduct in warehouse.Products)
+                {
+                    table.AddRow("Producto", warehouseProduct.Product.Name);
+                }
+            }
 
-            //Console.Write(table.ToString());
+            Console.Write(table.ToString());
 
         }
 
