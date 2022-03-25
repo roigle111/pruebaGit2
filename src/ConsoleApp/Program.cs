@@ -6,6 +6,7 @@ using PersistenceDatabase;
 using Services;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace ConsoleApp
 {
@@ -48,13 +49,15 @@ namespace ConsoleApp
 
             using (context)
             {
-                OrderService.Create(newOrder);
+                //OrderService.GetAll();
+                //OrderService.Create(newOrder);
                 //warehouseService.Delete(new List<int> {3, 4, 5, 6});
                 //UpdateClients(clientService);
                 //UpdateClient(clientService);
                 //CreateClients(clientService);
                 //CreateClient(clientService);
                 //PrintWaewhouseAndProductsOrder(warehouseService);
+                PrintProductsTableAsync(productService).Wait();
                 //PrintProductsTable(productService);
                 //PrintClientTable(clientService, 1);
                 //PrintClientsTable(clientService);
@@ -154,6 +157,22 @@ namespace ConsoleApp
                 {
                     table.AddRow("Producto", warehouseProduct.Product.Name);
                 }
+            }
+
+            Console.Write(table.ToString());
+
+        }
+
+
+        static async Task PrintProductsTableAsync(ProductService productService)
+        {
+            var products = await productService.GetAllAsync();
+
+            var table = new Table("ProductId", "Name", "Price");
+
+            foreach (var product in products)
+            {
+                table.AddRow(product.ProductId, product.Name, product.Price);
             }
 
             Console.Write(table.ToString());
